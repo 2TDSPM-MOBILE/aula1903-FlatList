@@ -17,6 +17,7 @@ export default function Cabecalho({text,setText,navigation,solicitarDados}) {
                 autoCorrect={false}
                 value={text}
                 onChangeText={(value) => setText(value)}
+                onSubmitEditing={() => solicitarDados(text)}
             />
             <Ionicons
                 name="search"

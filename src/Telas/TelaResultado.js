@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, TextInput, FlatList, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import API_KEY from '../API_KEY';
 import axios from 'axios';
 import Cabecalho from '../Components/Cabecalho';
+import {Ionicons} from "react-native-vector-icons"
+import TextoInfo from '../Components/TextInfo';
+import Loading from '../Components/Loading';
 
 const { width, height } = Dimensions.get("window")
 const IMAGE_WIDTH = width
@@ -14,9 +17,12 @@ export default function TelaResultado({ route, navigation }) {
 
   const [text, setText] = useState('')
   const [data, setData] = useState([])
+  const [showMessage,setShowMessage]=useState(true)
+  const [isLoading,setIsLoading]=useState(false)
 
   const solicitarDados = async (text) => {
     Keyboard.dismiss()
+    setIsLoading(true)
     try {
       const resultado = await axios.get(link, {
         params: {
@@ -25,7 +31,9 @@ export default function TelaResultado({ route, navigation }) {
         }
       })
       //console.log(resultado.data.data.images)
+      setShowMessage(false)
       setData(resultado.data.data)
+      setIsLoading(false)
     } catch (err) {
       console.log(err)
     }
@@ -46,9 +54,15 @@ export default function TelaResultado({ route, navigation }) {
       <FlatList
         data={data}
         numColumns={2}
+        ListHeaderComponent={
+          <>
+            <TextoInfo showMessage={showMessage}/>
+            <Loading isLoading={isLoading}/>
+          </>
+        }
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity onPress={()=>navigation.navigate("TelaDetalhes")}>
+            <TouchableOpacity onPress={()=>navigation.navigate("TelaDetalhes",{item:item})}>
               <Image
               style={styles.image}
               source={{ uri: item.images.preview_gif.url }}
@@ -79,7 +93,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   image: {
-    width: IMAGE_WIDTH/2,
-    height: IMAGE_WIDTH/2
+    borderRadius:10,
+    width: IMAGE_WIDTH/2.3,
+    height: IMAGE_WIDTH/2.3,
+    margin:IMAGE_WIDTH*0.03,
+   
   }
 });
