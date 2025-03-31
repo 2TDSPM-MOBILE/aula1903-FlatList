@@ -7,6 +7,7 @@ import Cabecalho from '../Components/Cabecalho';
 import {Ionicons} from "react-native-vector-icons"
 import TextoInfo from '../Components/TextInfo';
 import Loading from '../Components/Loading';
+import Error from '../Components/Error';
 
 const { width, height } = Dimensions.get("window")
 const IMAGE_WIDTH = width
@@ -19,6 +20,7 @@ export default function TelaResultado({ route, navigation }) {
   const [data, setData] = useState([])
   const [showMessage,setShowMessage]=useState(true)
   const [isLoading,setIsLoading]=useState(false)
+  const [showError,setShowError] = useState(false)
 
   const solicitarDados = async (text) => {
     Keyboard.dismiss()
@@ -36,6 +38,10 @@ export default function TelaResultado({ route, navigation }) {
       setIsLoading(false)
     } catch (err) {
       console.log(err)
+      setShowMessage(false)
+      setIsLoading(false)
+      setShowError(true)
+      alert("Estamos com problemas para carregar os dados!")
     }
   }
 
@@ -58,6 +64,7 @@ export default function TelaResultado({ route, navigation }) {
           <>
             <TextoInfo showMessage={showMessage}/>
             <Loading isLoading={isLoading}/>
+            <Error showError={showError}/>
           </>
         }
         renderItem={({ item }) => {

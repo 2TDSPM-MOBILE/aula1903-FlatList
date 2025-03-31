@@ -10,7 +10,7 @@ const Stack = createStackNavigator()
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator >
+      <Stack.Navigator>
         <Stack.Screen name="TelaInicial" component={TelaInicial} options={{headerShown:false}}/>
         <Stack.Screen name="TelaResultado" component={TelaResultado} options={{headerShown:false}}/>
         <Stack.Screen name="TelaDetalhes" component={TelaDetalhes} options={{headerShown:false}}/>
